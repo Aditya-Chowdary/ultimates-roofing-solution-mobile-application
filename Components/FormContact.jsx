@@ -1,7 +1,22 @@
 import React, { useState } from "react";
-import { ScrollView, TouchableOpacity, Alert } from "react-native";
+import { Alert, ScrollView, TouchableOpacity } from "react-native";
 import { View, Text, TextInput, Button, StyleSheet, Image } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import Icon from "@expo/vector-icons/Ionicons";
+import ImageUploadIcon from "../assets/ImageUploadIcon.png";
+import * as ImagePicker from "expo-image-picker";
+
+const options = {
+  title: "Select Image",
+  type: "library",
+  options: {
+    maxHeight: 200,
+    maxWidth: 200,
+    selectionLimit: 1,
+    mediaType: "photo",
+    includeBase64: false,
+  },
+};
 
 export default function FormContact() {
   const data = [
@@ -12,6 +27,7 @@ export default function FormContact() {
     { label: "Windows", value: "Windows" },
     { label: "Others", value: "Others" },
   ];
+  const [selectedImages, setSelectedImages] = useState(0);
   const [value, setValue] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -31,17 +47,32 @@ export default function FormContact() {
   };
 
   const handleSubmit = () => {
-    const isEmpty = Object.values(formData).some((value) => value === "");
-    if (isEmpty) {
-      // Display an alert if any field is empty
-      Alert.alert("Please fill out all required fields.");
+    if (firstName || lastName || gmail || phoneNumber || address || zip == '') {
+      Alert.alert('Please fill out required fields')
     }
+    console.log(formData);
+    // You can send the form data to your server or perform any other actions
   };
 
+  const selectImages = async () => {
+    try {
+      const images = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+      });
+      num_images = images.assets.length;
+      setSelectedImages(num_images);
+    } catch (e) {
+      // console.log(e);
+      setSelectedImages(0);
+    }
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
-       
+        <View>
+          <Text style={styles.fomeHead}>Reach Out to Us</Text>
+        </View>
         <View>
           <View style={{ flexDirection: "row" }}>
             <Text
@@ -55,6 +86,8 @@ export default function FormContact() {
             <TextInput
               style={[styles.input, { width: "48%", marginRight: "4%" }]}
               onChangeText={(text) => handleInputChange("firstName", text)}
+              // passwordRules={true}
+              secureTextEntry
             />
             <TextInput
               style={[styles.input, { width: "48%" }]}
@@ -136,6 +169,48 @@ export default function FormContact() {
           onChangeText={(text) => handleInputChange("message", text)}
           placeholder="Please share detailed information about your project to help us understand better."
         />
+        <View style={{ width: "100%" }}>
+          <View>
+            <TouchableOpacity style={{}} onPress={selectImages}>
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ alignContent: "center" }}>
+                  <Image
+                    style={{ width: 27, height: 27 }}
+                    source={ImageUploadIcon}
+                  />
+                </View>
+                <View style={{ alignContent: "center" }}>
+                  <Text
+                    style={{ marginLeft: 10, fontSize: 14, fontWeight: 400 }}
+                  >
+                    Attach Photos
+                  </Text>
+                  <Text style={{ marginLeft: 10 }}>
+                    {selectedImages <= 4 && selectedImages != 0 ? (
+                      <Text style={{ color: "green", fontWeight: "400" }}>
+                        ( {selectedImages} photos selected)
+                      </Text>
+                    ) : (
+                      <Text style={{ color: "#B22335" }}>
+                        <Icon
+                          name="md-alert-circle-outline"
+                          color={"#B22335"}
+                          size={13}
+                        />{" "}
+                        {selectedImages == 0
+                          ? "Please Select Photos"
+                          : "Please Select Lessthen 4 Photos, You Have Selected " +
+                            selectedImages +
+                            " Photos"}
+                      </Text>
+                    )}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
             <Text style={{ color: "#F9F9F9", fontSize: 14, fontWeight: "400" }}>
@@ -144,6 +219,7 @@ export default function FormContact() {
           </TouchableOpacity>
         </View>
       </View>
+
       <View style={{ marginBottom: 50 }}></View>
     </ScrollView>
   );
@@ -182,12 +258,13 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
-  formHead: {
+  fomeHead: {
     textAlign: "center",
-    fontSize: 22,
+    fontSize: 16,
     fontWeight: "500",
-    marginBottom: 40,
+    marginBottom: 50,
     color: "#181818",
+    fontFamily: "Hauora",
   },
   formLable: {
     fontSize: 12,
@@ -202,6 +279,28 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 13,
     alignItems: "center",
-    // marginBottom: 50
+    // marginBottom: 50,
+    marginTop: 10,
+  },
+  Contactbox: {
+    width: "48%",
+    height: 103,
+    backgroundColor: "#F5CCD1",
+    borderRadius: 4,
+    padding: 20,
+    paddingVertical: 20,
+  },
+  ContactboxTitle: {
+    fontSize: 18,
+    fontWeight: "500",
+    letterSpacing: 0.36,
+    // marginBottom: 15
+    lineHeight: 50,
+  },
+  ContactboxText: {
+    fontSize: 14,
+    fontWeight: "400",
+    letterSpacing: 0.28,
+    color: "#323539",
   },
 });

@@ -12,6 +12,9 @@ import {
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import axios from "axios";
+import Header from "./Header";
+import { useNavigation } from "@react-navigation/native";
+
 const KEY = "b182986efc1242b2a8c2709aa828fb67"; // Replace with your OpenCage API Key
 const defaultRegion = {
   latitude: 16.757,
@@ -20,61 +23,44 @@ const defaultRegion = {
   longitudeDelta: 0.0421,
 };
 
-const handleSearchLocation = (
-  setLoading,
-  setMarkerCoordinates,
-  textInputValue
-) => {
+const handleSearchLocation = async (setLoading, setMarkerCoordinates, textInputValue) => {
   setLoading(true);
 
-  axios
-    .get(
-      `https://[YOUR_IP_ADDRESS]/geocode/v1/json?q=${textInputValue}&key=${KEY}`
-    )
-    .then((response) => {
-      const firstResult = response.data.results[0];
+  try {
+    const response = await axios.get(`https://[YOUR_IP_ADDRESS]/geocode/v1/json?q=${textInputValue}&key=${KEY}`);
+    const firstResult = response.data.results[0];
 
-      if (firstResult) {
-        setMarkerCoordinates({
-          latitude: firstResult.geometry.lat,
-          longitude: firstResult.geometry.lng,
-        });
-      }
-    })
-    .catch((error) => {
-      // console.error("Error fetching geocoding data", error.message);
-      Alert.alert("Error fetching geocoding data", error.message);
-    })
-    .finally(() => {
-      setLoading(false);
-    });
+    if (firstResult) {
+      setMarkerCoordinates({
+        latitude: firstResult.geometry.lat,
+        longitude: firstResult.geometry.lng,
+      });
+    }
+  } catch (error) {
+    Alert.alert("Error fetching geocoding data", error.message);
+  } finally {
+    setLoading(false);
+  }
 };
 
-const Map = (props) => {
-  return (
-    <>
-      <MapView style={styles.map} region={props.region}>
-        <Marker
-          coordinate={props.Coordinates}
-          title="Selected Location"
-          description="Location based on entered text"
-        />
-      </MapView>
-    </>
-  );
-};
+const Map = (props) => (
+  <MapView style={styles.map} region={props.region}>
+    <Marker
+      coordinate={props.Coordinates}
+      title="Selected Location"
+      description="Location based on entered text"
+    />
+  </MapView>
+);
 
-export default function InstantQuote() {
+const InstantQuote = () => {
+  const navigation = useNavigation();
   const [mapRegion, setMapRegion] = useState(defaultRegion);
   const [textInputValue, setTextInputValue] = useState("");
-  const [markerCoordinates, setMarkerCoordinates] = useState({
-    latitude: defaultRegion.latitude,
-    longitude: defaultRegion.longitude,
-  });
+  const [markerCoordinates, setMarkerCoordinates] = useState(defaultRegion);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Update the map region when marker coordinates change
     setMapRegion({
       latitude: markerCoordinates.latitude,
       longitude: markerCoordinates.longitude,
@@ -84,9 +70,16 @@ export default function InstantQuote() {
   }, [markerCoordinates]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
+      <Header/>
+      <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>Instant Roof quote</Text>
+        <TouchableOpacity onPress={() => { navigation.navigate("home"), console.log('clicked') }}>
+            <Text style={styles.backText}>Back</Text>
+          </TouchableOpacity>
+        </View>
       <ScrollView>
-        <View style={styles.container}>
+        <View style={styles.mapContainer}>
           <Map region={mapRegion} Coordinates={markerCoordinates} />
         </View>
         <View style={styles.inputContainer}>
@@ -98,13 +91,7 @@ export default function InstantQuote() {
           />
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {
-              handleSearchLocation(
-                setLoading,
-                setMarkerCoordinates,
-                textInputValue
-              );
-            }}
+            onPress={() => handleSearchLocation(setLoading, setMarkerCoordinates, textInputValue)}
             disabled={loading}
           >
             {loading ? (
@@ -117,11 +104,35 @@ export default function InstantQuote() {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  mapContainer: {
     height: 250,
+    marginTop: 15,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: "5%",
+    marginTop: 10,
+  },
+  headerText: {
+    color: "#181818",
+    fontSize: 20,
+    fontWeight: "normal",
+    letterSpacing: 0.4,
+    fontFamily: "Hauora",
+  },
+  backText: {
+    color: "#181818",
+    fontFamily: "Hauora",
+    fontSize: 14,
+    marginTop: 6,
+    fontWeight: "400",
   },
   inputContainer: {
     flexDirection: "row",
@@ -139,7 +150,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: "100%",
-    height: 250,
+    height: "100%",
   },
   button: {
     backgroundColor: "red",
@@ -151,26 +162,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
   },
-  card_container: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 16,
-  },
-  card: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-  image: {
-    width: "100%",
-    height: 100,
-
-    resizeMode: "cover",
-  },
-  cardContent: {
-    padding: 16,
-  },
 });
+
+export default InstantQuote;

@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "@expo/vector-icons/Ionicons";
-
 import FormContact from "../Components/FormContact";
 import Header from "../Screens/Header";
+import BackNavigation from "../Components/BackNavigation";
 
 const ContactCard = ({ icon, title, subtitle, onPress }) => (
   <TouchableOpacity onPress={onPress}>
@@ -42,7 +42,7 @@ const ContactPage = () => {
       <Header button={true} />
 
       <ScrollView>
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
@@ -73,7 +73,9 @@ const ContactPage = () => {
           >
             Back
           </Text>
-        </View>
+        </View> */}
+
+        <BackNavigation title={"Contact Us"} />
         <View style={styles.contactContainer}>
           <ContactCard
             icon="ios-call"
@@ -82,8 +84,8 @@ const ContactPage = () => {
           />
           <ContactCard
             icon="ios-mail"
-            title="Thossan247@gmail.com"
-            subtitle="Rockakash100@gmail.com"
+            title="admin-hroofs@ultimatesolutionsit.com"
+            subtitle="sales-roofs@ultimatesolutionsit.com"
           />
           <ContactCard
             icon="ios-location"

@@ -51,7 +51,6 @@ export default function Header(props) {
             <TouchableNativeFeedback onPress={() => nav.navigate("quote")}>
               <View
                 style={{
-                  
                   paddingVertical: 10,
                   paddingHorizontal: 3,
                   alignItems: "center",

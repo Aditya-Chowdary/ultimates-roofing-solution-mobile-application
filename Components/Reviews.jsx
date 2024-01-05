@@ -47,7 +47,7 @@ const Reviews = () => {
   return (
     <View style={{ marginTop: 0 }}>
       
-      <Text style={styles.heading}>Reviews</Text>
+      {/* <Text style={styles.heading}>Reviews</Text> */}
       <Text style={styles.subHeading}>Hear it from Our Clients</Text>
       <Text style={styles.description}>
         Discover why homeowners love Ultimates Roofing! Read brief testimonials
