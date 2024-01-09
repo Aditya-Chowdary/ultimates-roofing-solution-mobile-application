@@ -8,10 +8,11 @@ import {
   ActivityIndicator,
   ScrollView,
   SafeAreaView,
-  Alert,
+  Alert,Modal
 } from "react-native";
 // import MapView, { Marker } from "react-native-maps";
 // import axios from "axios";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Header from "./Header";
 import BackNavigation from "../Components/BackNavigation";
 // const KEY = "b182986efc1242b2a8c2709aa828fb67"; // Replace with your OpenCage API Key
@@ -76,7 +77,15 @@ export default function InstantQuote() {
   //   longitude: defaultRegion.longitude,
   // });
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   // useEffect(() => {
   //   // Update the map region when marker coordinates change
   //   setMapRegion({
@@ -90,7 +99,17 @@ export default function InstantQuote() {
   return (
     <SafeAreaView>
         <Header />
-    
+        <View style={styles.assistContainer}>
+        <TouchableOpacity onPress={openModal} style={styles.button}>
+          <Text style={styles.buttonText}>
+            <MaterialCommunityIcons
+              name="google-assistant"
+              size={24}
+              color="white"
+            />
+          </Text>
+        </TouchableOpacity>
+      </View>
     
       <BackNavigation title={"InstantRoofQuote"}/>
         {/* <View style={styles.container}>
@@ -121,7 +140,22 @@ export default function InstantQuote() {
             )}
           </TouchableOpacity>
         </View> */}
-    
+    <Modal
+        transparent={true}
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {/* Your modal content goes here */}
+            <Text>This is the modal content</Text>
+            <TouchableOpacity onPress={closeModal}>
+              <Text>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -179,5 +213,38 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     padding: 16,
+  },
+  assistContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    top: "60%",
+  },
+  button: {
+    position: "absolute",
+    top: "50%",
+    right: 0,
+    transform: [{ translateY: -25 }], // Adjust translateY to center the button vertically
+    padding: 10,
+    backgroundColor: "crimson",
+    borderRadius: 55, // Make it round by setting borderRadius to half of the button's height
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
+  },
+  buttonText: {
+    color: "white",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
   },
 });

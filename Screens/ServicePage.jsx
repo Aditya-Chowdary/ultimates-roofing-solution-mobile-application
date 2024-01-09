@@ -5,15 +5,17 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Modal,
+  SafeAreaView,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import service1 from "../assets/ServicePageImages/our-service1.jpg";
 import service2 from "../assets/ServicePageImages/our-service2.jpg";
 import service3 from "../assets/ServicePageImages/our-service3.jpg";
 import service4 from "../assets/ServicePageImages/our-service4.jpg";
 import service5 from "../assets/ServicePageImages/our-service5.jpg";
 import { useNavigation } from "@react-navigation/native";
-import Footer from "../Components/Footer";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Header from "../Screens/Header";
 import arrow from "../assets/ServicePageImages/Arrow.png";
 import Trust from "../Components/Trust";
@@ -22,31 +24,33 @@ import BackNavigation from "../Components/BackNavigation";
 
 export default function ServicePage() {
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   return (
     <>
       <Header button={true} />
+      <SafeAreaView>
+        <View style={styles.assistContainer}>
+          <TouchableOpacity onPress={openModal} style={styles.button}>
+            <Text style={styles.buttonText}>
+              <MaterialCommunityIcons
+                name="google-assistant"
+                size={24}
+                color="white"
+              />
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
       <ScrollView style={styles.viewStyle}>
-        {/* <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginHorizontal: "5%",
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              color: "#181818",
-              fontSize: 20,
-              fontWeight: "normal",
-              letterSpacing: 0.4,
-              fontFamily: "Hauora",
-            }}
-          >
-            Services
-          </Text>
-          <Text style={{ color: "#181818",fontFamily:'Hauora',fontSize:14,marginTop:6,fontWeight:'400' }} onPress={() => navigation.navigate("home")}>Back</Text>
-        </View> */}
+       
         <BackNavigation title={"Services"} />
         <View style={{ gap: -40 }}>
           <TouchableOpacity onPress={() => navigation.navigate("Residential")}>
@@ -89,7 +93,6 @@ export default function ServicePage() {
                 flex: 1,
                 justifyContent: "center", // Centers vertically
                 alignItems: "center",
-
               }}
             >
               <Image source={service2} style={styles.ourImage} />
@@ -122,7 +125,6 @@ export default function ServicePage() {
                 flex: 1,
                 justifyContent: "center", // Centers vertically
                 alignItems: "center",
-
               }}
             >
               <Image source={service3} style={styles.ourImage} />
@@ -156,7 +158,6 @@ export default function ServicePage() {
                 flex: 1,
                 justifyContent: "center", // Centers vertically
                 alignItems: "center",
-
               }}
             >
               <Image source={service4} style={styles.ourImage} />
@@ -191,7 +192,6 @@ export default function ServicePage() {
                 flex: 1,
                 justifyContent: "center", // Centers vertically
                 alignItems: "center",
-
               }}
             >
               <Image source={service5} style={styles.ourImage} />
@@ -204,7 +204,6 @@ export default function ServicePage() {
                 justifyContent: "space-between",
                 padding: 20,
                 left: 20,
-
               }}
             >
               <View>
@@ -227,6 +226,22 @@ export default function ServicePage() {
           <Trust />
         </View>
       </ScrollView>
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {/* Your modal content goes here */}
+            <Text>This is the modal content</Text>
+            <TouchableOpacity onPress={closeModal}>
+              <Text>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -279,5 +294,38 @@ const styles = StyleSheet.create({
     zIndex: 1,
     marginTop: 75,
     marginLeft: 105,
+  },
+  assistContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    top: "60%",
+  },
+  button: {
+    position: "absolute",
+    top: "50%",
+    right: 0,
+    transform: [{ translateY: -25 }], // Adjust translateY to center the button vertically
+    padding: 10,
+    backgroundColor: "crimson",
+    borderRadius: 55, // Make it round by setting borderRadius to half of the button's height
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
+  },
+  buttonText: {
+    color: "white",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
   },
 });

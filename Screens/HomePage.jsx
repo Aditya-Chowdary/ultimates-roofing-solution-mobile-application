@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -6,16 +6,20 @@ import {
   View,
   TouchableOpacity,
   SafeAreaView,
+ 
 } from "react-native";
 import { useFonts } from "expo-font";
 import HauoraRegular from "../assets/Fonts/Hauora-Regular.ttf";
 import { Ionicons } from "@expo/vector-icons";
+
 import Header from "../Screens/Header";
 import { useNavigation } from "@react-navigation/native";
 import { SliderBox } from "react-native-image-slider-box";
 import Cards from "../Components/Cards";
 import Trust from "../Components/Trust";
 import ButtonCarousel from "../Components/ButtonCarousel";
+import AssistButton from "../Components/AssistButton";
+
 
 export default function HomePage() {
   const navigation = useNavigation();
@@ -33,7 +37,7 @@ export default function HomePage() {
   return (
     <SafeAreaView>
       <Header button={true} />
-
+     <AssistButton/>
       <ScrollView style={{ height: "auto" }}>
         <SafeAreaView>
           <View>
@@ -58,7 +62,7 @@ export default function HomePage() {
                 <TouchableOpacity
                   style={styles.GYFEButton}
                   onPress={() => {
-                    navigation.navigate("FreeEstimate");
+                    navigation.navigate("Contact");
                   }}
                 >
                   <View>
@@ -251,6 +255,7 @@ export default function HomePage() {
 
         <Trust />
       </ScrollView>
+   
     </SafeAreaView>
   );
 }
@@ -403,4 +408,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     marginTop: 10,
   },
+
 });

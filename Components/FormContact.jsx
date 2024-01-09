@@ -59,27 +59,6 @@ export default function FormContact() {
   return (
     <ScrollView >
 
-      {/* <View style={[styles.container, { flexDirection: 'row', }]}>
-        <View style={[styles.Contactbox, { marginRight: '4%' }]}>
-          <Text style={styles.ContactboxTitle}>
-            Call Us
-          </Text>
-          <Text style={styles.ContactboxText}>
-            <Icon name="call" size={12} color={'#B22335'} />
-            614-602-7980
-          </Text>
-        </View>
-        <View style={styles.Contactbox}>
-          <Text style={styles.ContactboxTitle}>
-
-            Locate Us
-          </Text>
-          <Text style={styles.ContactboxText}>
-            <Icon name="location" size={12} color={'#B22335'} />
-            Columbus, Ohio
-          </Text>
-        </View>
-      </View> */}
       <View style={styles.container}>
         <View ><Text style={styles.fomeHead}>Reach Out to Us</Text></View>
         <View >

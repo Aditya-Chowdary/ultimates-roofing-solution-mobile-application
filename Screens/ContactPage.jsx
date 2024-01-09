@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,11 +6,11 @@ import {
   ScrollView,
   SafeAreaView,
   Linking,
-  TouchableOpacity,
+  TouchableOpacity,Modal
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "@expo/vector-icons/Ionicons";
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import FormContact from "../Components/FormContact";
 import Header from "../Screens/Header";
 import BackNavigation from "../Components/BackNavigation";
@@ -37,45 +37,30 @@ const handleCardClick = () => {
 
 const ContactPage = () => {
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
 
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   return (
     <SafeAreaView>
       <Header button={true} />
-
+      <View style={styles.assistContainer}>
+        <TouchableOpacity onPress={openModal} style={styles.button}>
+          <Text style={styles.buttonText}>
+            <MaterialCommunityIcons
+              name="google-assistant"
+              size={24}
+              color="white"
+            />
+          </Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView>
-        {/* <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginHorizontal: "5%",
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              color: "#181818",
-              fontSize: 20,
-              fontWeight: "normal",
-              letterSpacing: 0.4,
-              fontFamily: "Hauora",
-            }}
-          >
-            Contact Us
-          </Text>
-          <Text
-            style={{
-              color: "#181818",
-              fontFamily: "Hauora",
-              fontSize: 14,
-              marginTop: 6,
-              fontWeight: "400",
-            }}
-            onPress={() => navigation.navigate("home")}
-          >
-            Back
-          </Text>
-        </View> */}
-
         <BackNavigation title={"Contact Us"} />
         <View style={styles.contactContainer}>
           <ContactCard
@@ -85,8 +70,8 @@ const ContactPage = () => {
           />
           <ContactCard
             icon="ios-mail"
-            title="Thossan247@gmail.com"
-            subtitle="Rockakash100@gmail.com"
+            title="admin - hrroofs@ultimatesolutionsit.com"
+            subtitle="sales - roofs@ultimatesolutionsit.com"
           />
           <ContactCard
             icon="ios-location"
@@ -112,6 +97,22 @@ const ContactPage = () => {
           <FormContact />
         </View>
       </ScrollView>
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {/* Your modal content goes here */}
+            <Text>This is the modal content</Text>
+            <TouchableOpacity onPress={closeModal}>
+              <Text>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -151,6 +152,39 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     paddingHorizontal: "5%",
+  },
+  assistContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    top: "60%",
+  },
+  button: {
+    position: "absolute",
+    top: "50%",
+    right: 0,
+    transform: [{ translateY: -25 }], // Adjust translateY to center the button vertically
+    padding: 10,
+    backgroundColor: "crimson",
+    borderRadius: 55, // Make it round by setting borderRadius to half of the button's height
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
+  },
+  buttonText: {
+    color: "white",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
   },
 });
 
